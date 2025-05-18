@@ -14,6 +14,7 @@ class Rol extends Model
     public $incrementing = true;
     protected $keyType = 'integer';
     protected $fillable = ['nombre', 'descripcion', 'permisos', 'visible'];
+    
     public function usuarios()
     {
         return $this->belongsToMany(User::class, 'usuario_rol')

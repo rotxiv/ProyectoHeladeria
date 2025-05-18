@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('unidades', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo')->unique();
-            $table->string('nombre');
-            $table->text('descripcion');
-            $table->string('cantidad');
+            $table->string('simbolo')->unique();
+            $table->string('descripcion');
+            $table->boolean('visible')->default(true);
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('unidades');
     }
 };

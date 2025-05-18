@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('item_id')->unique();
+            $table->string('nombre');
+            $table->string('tipo_id')->unique();
+            $table->string('sabor_id')->unique();            
+            $table->text('observacion');
+            $table->boolean('visible')->default(true);
             $table->timestamps();
+
+            $table->foreign('item_id')->references('id')->on('items');
+            $table->foreign('tipo_id')->references('id')->on('tipos');
+            $table->foreign('sabor_id')->references('id')->on('sabores');
         });
     }
 
