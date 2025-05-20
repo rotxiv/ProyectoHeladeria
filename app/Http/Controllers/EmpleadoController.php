@@ -8,29 +8,31 @@ use App\Models\Persona;
 
 class EmpleadoController extends Controller
 {
+    public function panel()
+    {
+        return view('admin.empleados.panel');
+    }
+
     public function index()
     {
-        $empleados = Empleado::with('persona')->where('visible', true)->get();
+        $empleados = Empleado::with('persona')
+            ->where('visible', true)->get();
+        
         return view('admin.empleados.index', compact('empleados'));
     }
 
     public function create()
     {
-        // Solo empleados visibles que no tengan usuario aún
-        $empleados = Empleado::where('visible', true)
-            ->whereDoesntHave('user')
-            ->with('persona')
-            ->get();
-
-        return view('admin.usuarios.create', compact('empleados'));
+        return view('admin.empleados.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'nombre' => 'required|string|max:100',
+            'carnet'=> 'required|string|max:20|unique:personas,carnet',
             'telefono' => 'nullable|string|max:20',
-            'direccion' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255'
         ]);
 
         // Crear persona
@@ -52,38 +54,59 @@ class EmpleadoController extends Controller
 
     public function show($id)
     {
-        $empleado = Empleado::with('persona')->findOrFail($id);
+        //$empleado = Empleado::with('persona')->findOrFail($id);
+        $empleado = Empleado::where('visible', true)->with('persona')->find($id);
+        
         return view('admin.empleados.show', compact('empleado'));
     }
 
     public function edit($id)
     {
         $empleado = Empleado::with('persona')->findOrFail($id);
+
         return view('admin.empleados.edit', compact('empleado'));
     }
 
     public function update(Request $request, $id)
     {
+        // Validar los datos del formulario
+        $request->validate([
+            'persona.carnet' => 'required|unique:personas,carnet,' . $request->input('persona.id'),
+            'persona.nombre' => 'required|string',
+            'persona.telefono' => 'nullable|string',
+            'empleado.direccion' => 'nullable|string',
+        ]);
+
+        // Obtener el empleado
         $empleado = Empleado::findOrFail($id);
 
-        $request->validate([
-            'direccion' => 'required|string|max:255',
-        ]);
+        // Actualizar los datos de la Persona asociada
+        $empleado->persona->update($request->input('persona'));
 
+        // Actualizar los datos del Empleado
         $empleado->update([
-            'direccion' => $request->direccion,
+            'direccion' => $request->input('empleado.direccion')
         ]);
 
-        return redirect()->route('admin.empleados.index')->with('success', 'Empleado actualizado.');
+        return redirect()->route('admin.empleados.index')
+            ->with('success', 'El empleado fue actualizado correctamente.');
     }
 
     public function destroy($id)
     {
         $empleado = Empleado::findOrFail($id);
+
+        if (!$empleado) {
+            return redirect()->route('admin.empleados.index')
+                ->with('error','El empleado con el id '. $id . ' no fue encontrado');
+        }
+
         $empleado->visible = false;
+        
         $empleado->save();
 
-        return redirect()->route('admin.empleados.index')->with('success', 'Empleado eliminado (ocultado) correctamente.');
+        return redirect()->route('admin.empleados.index')
+            ->with('success', 'El empleado eliminado correctamente.');
     }
 
 }

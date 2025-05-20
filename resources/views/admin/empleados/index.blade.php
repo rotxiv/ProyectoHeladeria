@@ -3,40 +3,116 @@
 @section('title', 'Empleados')
 
 @section('content')
-    <h2>Listado de Empleados</h2>
+<div class="container">
+    <h2 class="page-title">Listado de Empleados</h2>
 
-    <a href="{{ route('admin.empleados.create') }}" class="button">Crear nuevo empleado</a>
+    <div class="actions">
+        <a href="{{ route('admin.empleados.create') }}" class="btn green">
+            &#x2795; Crear nuevo empleado
+        </a>
+    </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Carnet</th>
-                <th>Teléfono</th>
-                <th>Dirección</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($empleados as $empleado)
+    <div class="card">
+        <table class="custom-table">
+            <thead>
                 <tr>
-                    <td>{{ $empleado->id }}</td>
-                    <td>{{ $empleado->persona->nombre ?? 'Sin datos' }}</td>
-                    <td>{{ $empleado->persona->carnet ?? '-' }}</td>
-                    <td>{{ $empleado->persona->telefono ?? '-' }}</td>
-                    <td>{{ $empleado->direccion }}</td>
-                    <td>
-                        <a href="{{ route('admin.empleados.edit', $empleado->id) }}">Editar</a> |
-                        <form action="{{ route('admin.empleados.destroy', $empleado->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button onclick="return confirm('¿Eliminar este empleado?')">Eliminar</button>
-                        </form>
-                    </td>
+                    <th>Nombre</th>
+                    <th>Carnet</th>
+                    <!-- <th>Cargo</th> -->
+                    <th>Acciones</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
-@endsection
+            </thead>
+            <tbody>
+                @foreach($empleados as $empleado)
+                    <tr>
+                        <td>{{ $empleado->persona->nombre ?? 'Sin datos' }}</td>
+                        <td>{{ $empleado->persona->carnet ?? '-' }}</td>
+<!--                         <td>{{ $empleado->cargo ?? '-' }}</td> -->                        
+                         <td>
+                            <a href="{{ route('admin.empleados.show', $empleado->id) }}" class="btn blue">Ver</a>
+                            <a href="{{ route('admin.empleados.edit', $empleado->id) }}" class="btn orange">Editar</a>
+                            <form action="{{ route('admin.empleados.destroy', $empleado->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn red" onclick="return confirm('¿Eliminar este empleado?')">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
 
+<style>
+    .container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .page-title {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 28px;
+        color: #333;
+    }
+
+    .actions {
+        text-align: right;
+        margin-bottom: 15px;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 6px 12px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 14px;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn.green { background-color: #28a745; }
+    .btn.blue { background-color: #007bff; }
+    .btn.orange { background-color: #fd7e14; }
+    .btn.red { background-color: #dc3545; }
+
+    .card {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        overflow-x: auto;
+    }
+
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .custom-table th, .custom-table td {
+        padding: 12px 10px;
+        text-align: center;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .custom-table th {
+        background-color: #343a40;
+        color: white;
+    }
+
+    .custom-table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    form {
+        display: inline;
+    }
+
+    .btn + .btn {
+        margin-left: 5px;
+    }
+</style>
+@endsection

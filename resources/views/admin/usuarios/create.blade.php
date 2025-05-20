@@ -3,7 +3,7 @@
 @section('content')
     <h2>Registrar Nuevo Usuario</h2>
 
-    <form action="{{ route('admin.empleados.store') }}" method="POST">
+    <form action="{{ route('admin.usuarios.store') }}" method="POST">
         @csrf
         <label for="empleado_id"> Empleado </label>
         <select name="empleado_id" id="empleado_id" required>

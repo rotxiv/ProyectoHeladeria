@@ -9,6 +9,7 @@ class RolController extends Controller
     public function index()
     {
         $roles = Rol::where('visible', true)->get();
+
         return view('admin.roles.index', compact('roles'));
     }
 
@@ -20,8 +21,8 @@ class RolController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:100|unique:roles,nombre',
-            'descripcion' => 'nullable|string',
+            'nombre' => 'required|string|max:50|unique:roles,nombre',
+            'descripcion' => 'required|string|max:255',
         ]);
 
         Rol::create([
@@ -29,18 +30,21 @@ class RolController extends Controller
             'descripcion' => $request->descripcion,
         ]);
 
-        return redirect()->route('admin.roles.index')->with('success', 'Rol creado correctamente.');
+        return redirect()->route('admin.roles.index')
+            ->with('success', 'Rol creado correctamente.');
     }
 
     public function show($id)
     {
         $rol = Rol::findOrFail($id);
+
         return view('admin.roles.show', compact('rol'));
     }
 
     public function edit($id)
     {
         $rol = Rol::findOrFail($id);
+        
         return view('admin.roles.edit', compact('rol'));
     }
 
@@ -58,7 +62,8 @@ class RolController extends Controller
             'descripcion' => $request->descripcion,
         ]);
 
-        return redirect()->route('admin.roles.index')->with('success', 'Rol actualizado correctamente.');
+        return redirect()->route('admin.roles.index')
+            ->with('success', 'Rol actualizado correctamente.');
     }
 
     public function destroy($id)
@@ -67,6 +72,7 @@ class RolController extends Controller
         $rol->visible = false;
         $rol->save();
 
-        return redirect()->route('admin.roles.index')->with('success', 'Rol eliminado (ocultado) correctamente.');
+        return redirect()->route('admin.roles.index')
+            ->with('success', 'Rol eliminado (ocultado) correctamente.');
     }
 }

@@ -12,5 +12,5 @@ class Item extends Model
     protected $primaryKey = 'id';
     public $incrementing = true; // Asegurar autoincremento
     protected $keyType = 'integer';
-    protected $fillable = ['codigo', 'nombre', 'descripcion', 'cantidad', 'visible'];
+    protected $fillable = ['codigo', 'nombre', 'descripcion', 'cantidad'];
 }

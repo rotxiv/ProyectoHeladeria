@@ -23,9 +23,6 @@
             <label for="nombre">Nombre:</label>
             <input type="text" name="nombre" required><br>
 
-            <label for="apellido">Apellido:</label>
-            <input type="text" name="apellido" required><br>
-
             <label for="carnet">Carnet:</label>
             <input type="text" name="carnet" required><br>
 

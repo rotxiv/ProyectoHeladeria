@@ -51,10 +51,16 @@
 
     <nav>
         <a href="{{ route('admin.dashboard') }}">Inicio</a>
-        <a href="{{ route('admin.empleados.index') }}">Empleados</a>
+        <a href="{{ route('admin.empleados.panel') }}">Empleados</a>
         <a href="{{ route('admin.clientes.index') }}">Clientes</a>
         <a href="{{ route('admin.usuarios.index') }}">Usuarios</a>
         <a href="{{ route('admin.roles.index') }}">Roles</a>
+        <a href="{{ route('admin.tipos.index') }}">Tipos</a>
+        <a href="{{ route('admin.sabores.index') }}">Sabores</a>
+        <a href="{{ route('admin.unidades.index') }}">Unidades</a>
+        <a href="{{ route('admin.ingredientes.index') }}">Ingredientes</a>
+        <a href="{{ route('admin.productos.index') }}">Producto</a>
+
         <form action="{{ route('logout') }}" method="POST" style="display:inline;">
             @csrf
             <button type="submit" style="background:none; color:white; border:none; cursor:pointer;">Cerrar sesión</button>
@@ -62,7 +68,7 @@
     </nav>
 
     <div class="container">
-        @yield('content')
+        @yield('content')       <!-- Aqui va el contenido -->
     </div>
 
     <footer>

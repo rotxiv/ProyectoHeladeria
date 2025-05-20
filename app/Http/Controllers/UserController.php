@@ -13,13 +13,18 @@ class UserController extends Controller
     {
         // Cargamos la relación hasta persona para mostrar el nombre
         $usuarios = User::with('empleado.persona')->where('visible', true)->get();
+        
         return view('admin.usuarios.index', compact('usuarios'));
     }
 
     public function create()
     {
-        // Empleados que aún no tienen un usuario asignado
-        $empleados = Empleado::whereDoesntHave('user')->with('persona')->get();
+        // Empleados que aún no tienen un usuario asignado        
+        $empleados = Empleado::where('visible', true)
+            ->whereDoesntHave('user')
+            ->with('persona')
+            ->get();
+
         return view('admin.usuarios.create', compact('empleados'));
     }
 
@@ -45,12 +50,14 @@ class UserController extends Controller
     public function show($id)
     {
         $usuario = User::with('empleado.persona')->findOrFail($id);
+        
         return view('admin.usuarios.show', compact('usuario'));
     }
 
     public function edit($id)
     {
         $usuario = User::with('empleado.persona')->findOrFail($id);
+
         return view('admin.usuarios.edit', compact('usuario'));
     }
 
@@ -73,15 +80,19 @@ class UserController extends Controller
 
         $usuario->save();
 
-        return redirect()->route('admin.usuarios.index')->with('success', 'Usuario actualizado.');
+        return redirect()->route('admin.usuarios.index')
+            ->with('success', 'Usuario actualizado.');
     }
 
     public function destroy($id)
     {
         $usuario = User::findOrFail($id);
+
         $usuario->visible = false;
+        
         $usuario->save();
 
-        return redirect()->route('admin.usuarios.index')->with('success', 'Usuario eliminado (ocultado) correctamente.');
+        return redirect()->route('admin.usuarios.index')
+            ->with('success', 'Usuario eliminado correctamente.');
     }
 }

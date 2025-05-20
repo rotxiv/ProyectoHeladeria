@@ -16,8 +16,7 @@ class ClienteController extends Controller
 
     public function create()
     {
-        $personasDisponibles = Persona::whereDoesntHave('cliente')->get();
-        return view('admin.clientes.create', compact('personasDisponibles'));
+        return view('admin.clientes.create');
     }
 
     public function store(Request $request)
@@ -49,28 +48,40 @@ class ClienteController extends Controller
     public function show($id)
     {
         $cliente = Cliente::with('persona')->findOrFail($id);
+
         return view('admin.clientes.show', compact('cliente'));
     }
 
     public function edit($id)
     {
         $cliente = Cliente::with('persona')->findOrFail($id);
+
         return view('admin.clientes.edit', compact('cliente'));
     }
 
     public function update(Request $request, $id)
     {
+        // Validar los datos del formulario
+        $request->validate([
+            'persona.carnet' => 'required|unique:personas,carnet,' . $request->input('persona.id'),
+            'persona.nombre' => 'required|string|max:50',
+            'persona.telefono' => 'required|string|max:20',
+            'empleado.direccion' => 'required|string|max:100'
+        ]);
+
+        // Obtener el empleado
         $cliente = Cliente::findOrFail($id);
 
-        $request->validate([
-            'codigo' => 'required|string|max:100|unique:clientes,codigo,' . $cliente->id,
-        ]);
+        // Actualizar los datos de la Persona asociada
+        $cliente->persona->update($request->input('persona'));
 
+        // Actualizar los datos del Empleado
         $cliente->update([
-            'codigo' => $request->codigo,
+            'direccion' => $request->input('empleado.direccion')
         ]);
 
-        return redirect()->route('admin.clientes.index')->with('success', 'Cliente actualizado.');
+        return redirect()->route('admin.clientes.index')
+            ->with('success', 'El cliente fue actualizado correctamente.');
     }
 
     public function destroy($id)

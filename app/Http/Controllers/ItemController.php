@@ -12,7 +12,17 @@ class ItemController extends Controller
      */
     public function index()
     {
-        return response()->json(Item::where('visible', true)->get());
+        $items = Item::all();
+
+        return view("admin.items.index", compact("items"));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view("admin.items.create");
     }
 
     /**
@@ -22,34 +32,43 @@ class ItemController extends Controller
     {
         $request->validate([
             'codigo' => 'required|unique:items',
-            'nombre' => 'required',
+            'nombre' => 'required|string|max:255',
             'cantidad' => 'required|integer',
-            'descripcion' => 'require'
-            //'visible' => 'boolean'
+            'descripcion' => 'required|string|max:255'
         ]);
 
         $item = Item::create($request->all());
 
-        return response()->json($item, 201);
+        return redirect()->route('admin.items.index')
+            ->with('success','Item almacenado correctamente');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        $item = Item::where('visible', true)->find($id);
+        $item = Item::findOrFail($id);
 
-        return $item ? response()->json($item, 200) : 
-            response()->json(['message' => ' no encontrado o inactivo'], 404);
+        return view('admin.items.show', compact('item'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        $item = Item::findOrFail($id);
+
+        return view('admin.unidades.edit', compact('unidad'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $item = Item::where('visible', true)->find($id);
+        $item = Item::findOrFail($id);
 
         $request->validate([
             'codigo' => 'string|unique:items,codigo,' . $id,
@@ -57,27 +76,37 @@ class ItemController extends Controller
             'cantidad' => 'integer',
         ]);
 
-        $item->update($request->all());
-        return response()->json($item);
+        $item->update([
+            'codigo' => $request->codigo,
+            'nombre' => $request->nombre,
+            'cantidad' => $request->cantidad,
+        ]);
+
+        return redirect()->route('admin.items.index')
+            ->with('success','El item ha sido actualizado correctamente');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
+        // Buscar el item en la base de datos
         $item = Item::find($id);
 
+        // Si el item no existe, redirigir con un mensaje de error
         if (!$item) {
-            return response()->json(
-                ['message' => 'Item no encontrado'], 
-                404
-            );
+            return redirect()->route('admin.items.index')
+                ->with('error', 'El item con ID ' . $id . ' no fue encontrado.');
         }
 
-        $item->update(['visible' => false]);
+        // Si el item existe, proceder con la eliminación
+        $item->visible = false;
 
-        return response()->json(['message' => 'Item eliminado'], 200);
+        $item->save();
+
+        return redirect()->route('items.index')
+            ->with('success', 'Item eliminado correctamente.');
     }
 
     // Listar items desactivados

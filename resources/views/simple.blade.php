@@ -65,7 +65,7 @@
         @yield('content')
 
         <footer>
-            © {{ date('Y') }} Mi Empresa. Todos los derechos reservados.
+            © {{ date('Y') }} Mi Empresa es una heladeria. Todos los derechos reservados.
         </footer>
     </div>
 </body>
