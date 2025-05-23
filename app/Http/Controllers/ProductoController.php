@@ -8,6 +8,10 @@ use App\Models\Item;
 
 class ProductoController extends Controller
 {
+    public function panel()
+    {
+        return view('controlador.productos.panel');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -15,7 +19,7 @@ class ProductoController extends Controller
     {
         $productos = Producto::all();
 
-        return view("admin.productos.index", compact("productos"));
+        return view("controlador.productos.index", compact("productos"));
     }
 
      /**
@@ -23,7 +27,7 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        return view("admin.productos.create");
+        return view("controlador.productos.create");
     }
 
     /**
@@ -55,7 +59,7 @@ class ProductoController extends Controller
             'observacion' => $request->observacion
         ]);
 
-        return redirect()->route('admin.productos.index')
+        return redirect()->route('controlador.productos.index')
             ->with('success','El producto fue almacenado exitosamente');
     }
 
@@ -67,11 +71,11 @@ class ProductoController extends Controller
         $producto = Producto::find($id);
 
         if (!$producto) {
-            return redirect()->route('admin.productos.index')
+            return redirect()->route('controlador.productos.index')
                 ->with('error','El producto no fue encontrado');
         }
 
-        return view('admin.productos.show', compact('producto'));
+        return view('controlador.productos.show', compact('producto'));
     }
 
     /**
@@ -82,10 +86,10 @@ class ProductoController extends Controller
         $producto = Producto::find($id);
 
         if (!$producto) {
-            return redirect()->route('admin.producto.index')
+            return redirect()->route('controlador.producto.index')
                 ->with('error', 'El producto con ID ' . $id . ' no fue encontrado.');
         }
-        return view('admin.productos.edit', compact('producto'));
+        return view('controlador.productos.edit', compact('producto'));
     }
 
     /**
@@ -112,7 +116,7 @@ class ProductoController extends Controller
             'observacion' => $request->observacion
         ]);
 
-        return redirect()->route('admin.producto.index')
+        return redirect()->route('controlador.producto.index')
             ->with('success','El producto fue actualizado correctamente');
     }
 
@@ -124,14 +128,14 @@ class ProductoController extends Controller
         $producto = Producto::find($id);
 
         if (!$producto) {
-            return redirect()->route('admin.productos.index')
+            return redirect()->route('controlador.productos.index')
                 ->with('error','El producto con el id '. $id . ' no fue encontrado');
         }
 
         // Si el ingrediente existe, proceder con la eliminación
         $producto->update(['visible' => false]);
 
-        return redirect()->route('admin.productos.index')
+        return redirect()->route('controlador.productos.index')
             ->with('success','El producto fue eliminado correctamente');
     }
 }

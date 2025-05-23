@@ -32,9 +32,11 @@ class AuthController extends Controller
             // Redireccionamos según el nombre del rol
             switch ($rol->nombre) {
                 case 'Administrador':
-                    return redirect()->route('admin.dashboard');
-                case 'editor':
-                    return redirect()->route('editor');
+                    return redirect()->route('administrador');
+                case 'Recepcionista':
+                    return redirect()->route('recepcionista');
+                case 'EncargadoCocina':
+                    return redirect()->route('encargado');
                 case 'Camarero':
                     return redirect()->route('camarero');
                 default:

@@ -6,16 +6,21 @@ use App\Models\Rol;
 
 class RolController extends Controller
 {
+    public function panel()
+    {
+        return view('controlador.roles.panel');
+    }
+
     public function index()
     {
         $roles = Rol::where('visible', true)->get();
 
-        return view('admin.roles.index', compact('roles'));
+        return view('controlador.roles.index', compact('roles'));
     }
 
     public function create()
     {
-        return view('admin.roles.create');
+        return view('controlador.roles.create');
     }
 
     public function store(Request $request)
@@ -30,7 +35,7 @@ class RolController extends Controller
             'descripcion' => $request->descripcion,
         ]);
 
-        return redirect()->route('admin.roles.index')
+        return redirect()->route('controlador.roles.index')
             ->with('success', 'Rol creado correctamente.');
     }
 
@@ -38,14 +43,14 @@ class RolController extends Controller
     {
         $rol = Rol::findOrFail($id);
 
-        return view('admin.roles.show', compact('rol'));
+        return view('controlador.roles.show', compact('rol'));
     }
 
     public function edit($id)
     {
         $rol = Rol::findOrFail($id);
         
-        return view('admin.roles.edit', compact('rol'));
+        return view('controlador.roles.edit', compact('rol'));
     }
 
     public function update(Request $request, $id)
@@ -62,7 +67,7 @@ class RolController extends Controller
             'descripcion' => $request->descripcion,
         ]);
 
-        return redirect()->route('admin.roles.index')
+        return redirect()->route('controlador.roles.index')
             ->with('success', 'Rol actualizado correctamente.');
     }
 
@@ -72,7 +77,7 @@ class RolController extends Controller
         $rol->visible = false;
         $rol->save();
 
-        return redirect()->route('admin.roles.index')
+        return redirect()->route('controlador.roles.index')
             ->with('success', 'Rol eliminado (ocultado) correctamente.');
     }
 }

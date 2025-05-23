@@ -8,15 +8,20 @@ use App\Models\Persona;
 
 class ClienteController extends Controller
 {
+    public function panel()
+    {
+        return view('controlador.clientes.panel');
+    }
+
     public function index()
     {
         $clientes = Cliente::with('persona')->where('visible', true)->get();
-        return view('admin.clientes.index', compact('clientes'));
+        return view('controlador.clientes.index', compact('clientes'));
     }
 
     public function create()
     {
-        return view('admin.clientes.create');
+        return view('controlador.clientes.create');
     }
 
     public function store(Request $request)
@@ -41,7 +46,7 @@ class ClienteController extends Controller
             'codigo' => $request->codigo,
         ]);
 
-        return redirect()->route('admin.clientes.index')
+        return redirect()->route('controlador.clientes.index')
             ->with('success', 'Cliente creado correctamente.');
     }
 
@@ -49,14 +54,14 @@ class ClienteController extends Controller
     {
         $cliente = Cliente::with('persona')->findOrFail($id);
 
-        return view('admin.clientes.show', compact('cliente'));
+        return view('controlador.clientes.show', compact('cliente'));
     }
 
     public function edit($id)
     {
         $cliente = Cliente::with('persona')->findOrFail($id);
 
-        return view('admin.clientes.edit', compact('cliente'));
+        return view('controlador.clientes.edit', compact('cliente'));
     }
 
     public function update(Request $request, $id)
@@ -80,7 +85,7 @@ class ClienteController extends Controller
             'direccion' => $request->input('empleado.direccion')
         ]);
 
-        return redirect()->route('admin.clientes.index')
+        return redirect()->route('controlador.clientes.index')
             ->with('success', 'El cliente fue actualizado correctamente.');
     }
 
@@ -90,6 +95,7 @@ class ClienteController extends Controller
         $cliente->visible = false;
         $cliente->save();
 
-        return redirect()->route('admin.clientes.index')->with('success', 'Cliente eliminado (ocultado) correctamente.');
+        return redirect()->route('controlador.clientes.index')
+            ->with('success', 'Cliente eliminado (ocultado) correctamente.');
     }
 }

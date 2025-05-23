@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class SaborController extends Controller
 {
+    public function panel()
+    {
+        return view('controlador.sabores.panel');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -14,7 +19,7 @@ class SaborController extends Controller
     {
         $sabores = Sabor::all();
 
-        return view("admin.sabores.index", compact("sabores"));
+        return view("controlador.sabores.index", compact("sabores"));
     }
 
     /**
@@ -22,7 +27,7 @@ class SaborController extends Controller
      */
     public function create()
     {
-        return view("admin.sabores.create");
+        return view("controlador.sabores.create");
     }
 
     /**
@@ -37,7 +42,7 @@ class SaborController extends Controller
 
         Sabor::create($request->all());
 
-        return redirect()->route('admin.sabores.index')
+        return redirect()->route('controlador.sabores.index')
             ->with('success', 'Sabor creado correctamente');
     }
 
@@ -48,7 +53,7 @@ class SaborController extends Controller
     {
         $sabor = Sabor::findOrFail($id);
         
-        return view('admin.sabores.show', compact('sabor'));
+        return view('controlador.sabores.show', compact('sabor'));
     }
 
     /**
@@ -58,7 +63,7 @@ class SaborController extends Controller
     {
         $sabor = Sabor::findOrFail($id);
 
-        return view('admin.sabores.edit', compact('sabor'));
+        return view('controlador.sabores.edit', compact('sabor'));
     }
 
     /**
@@ -78,7 +83,7 @@ class SaborController extends Controller
             'descripcion'=> $request->descripcion
         ]);
 
-        return redirect()->route('admin.sabores.index')
+        return redirect()->route('controlador.sabores.index')
             ->with('success', 'Sabor acttualizado correctamente');
     }
 
@@ -93,7 +98,7 @@ class SaborController extends Controller
 
         $sabor->save();
 
-        return redirect()->route('admin.saboeres.index')
+        return redirect()->route('controlador.saboeres.index')
             ->with('success', 'Tipo eliminado correctamente');
     }
 }

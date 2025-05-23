@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class TipoController extends Controller
 {
+    public function panel()
+    {
+        return view('controlador.tipos.panel');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -14,7 +18,7 @@ class TipoController extends Controller
     {
         $tipos = Tipo::all();
         
-        return view('admin.tipos.index', compact('tipos'));
+        return view('controlador.tipos.index', compact('tipos'));
     }
 
     /**
@@ -22,7 +26,7 @@ class TipoController extends Controller
      */
     public function create()
     {
-        return view('admin.tipos.create');
+        return view('controlador.tipos.create');
     }
 
     /**
@@ -37,7 +41,7 @@ class TipoController extends Controller
 
         Tipo::create($request->all());
 
-        return redirect()->route('admin.tipos.index')
+        return redirect()->route('controlador.tipos.index')
             ->with('success', 'Tipo creado correctamente');
     }
 
@@ -48,7 +52,7 @@ class TipoController extends Controller
     {
         $tipo = Tipo::findOrFail($id);
         
-        return view('admin.tipos.show', compact('tipo'));
+        return view('controlador.tipos.show', compact('tipo'));
     }
 
     /**
@@ -58,7 +62,7 @@ class TipoController extends Controller
     {
         $tipo = Tipo::findOrFail($id);
 
-        return view('admin.roles.edit', compact('tipo'));
+        return view('controlador.roles.edit', compact('tipo'));
     }
 
     /**
@@ -78,7 +82,7 @@ class TipoController extends Controller
             'descripcion'=> $request->descripcion
         ]);
 
-        return redirect()->route('admin.tipos.index')
+        return redirect()->route('controlador.tipos.index')
             ->with('success', 'Tipo actualizado correctamente');
     }
 
@@ -93,7 +97,7 @@ class TipoController extends Controller
 
         $tipo->save();
 
-        return redirect()->route('admin.tipos.index')
+        return redirect()->route('controlador.tipos.index')
             ->with('success', 'Tipo eliminado correctamente');
     }
 }

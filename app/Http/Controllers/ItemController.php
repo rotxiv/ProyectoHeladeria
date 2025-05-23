@@ -7,6 +7,11 @@ use App\Models\Item;
 
 class ItemController extends Controller
 {
+    public function panel()
+    {
+        return view('controlador.items.panel');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -14,7 +19,7 @@ class ItemController extends Controller
     {
         $items = Item::all();
 
-        return view("admin.items.index", compact("items"));
+        return view("controlador.items.index", compact("items"));
     }
 
     /**
@@ -22,7 +27,7 @@ class ItemController extends Controller
      */
     public function create()
     {
-        return view("admin.items.create");
+        return view("controlador.items.create");
     }
 
     /**
@@ -39,7 +44,7 @@ class ItemController extends Controller
 
         $item = Item::create($request->all());
 
-        return redirect()->route('admin.items.index')
+        return redirect()->route('controlador.items.index')
             ->with('success','Item almacenado correctamente');
     }
 
@@ -50,7 +55,7 @@ class ItemController extends Controller
     {
         $item = Item::findOrFail($id);
 
-        return view('admin.items.show', compact('item'));
+        return view('controlador.items.show', compact('item'));
     }
 
     /**
@@ -60,7 +65,7 @@ class ItemController extends Controller
     {
         $item = Item::findOrFail($id);
 
-        return view('admin.unidades.edit', compact('unidad'));
+        return view('controlador.unidades.edit', compact('unidad'));
     }
 
     /**
@@ -82,7 +87,7 @@ class ItemController extends Controller
             'cantidad' => $request->cantidad,
         ]);
 
-        return redirect()->route('admin.items.index')
+        return redirect()->route('controlador.items.index')
             ->with('success','El item ha sido actualizado correctamente');
     }
 
@@ -96,7 +101,7 @@ class ItemController extends Controller
 
         // Si el item no existe, redirigir con un mensaje de error
         if (!$item) {
-            return redirect()->route('admin.items.index')
+            return redirect()->route('controlador.items.index')
                 ->with('error', 'El item con ID ' . $id . ' no fue encontrado.');
         }
 
@@ -105,7 +110,7 @@ class ItemController extends Controller
 
         $item->save();
 
-        return redirect()->route('items.index')
+        return redirect()->route('controlador.items.index')
             ->with('success', 'Item eliminado correctamente.');
     }
 

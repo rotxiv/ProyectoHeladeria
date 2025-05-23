@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class UnidadController extends Controller
 {
+    public function panel()
+    {
+        return view('controlador.unidades.panel');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -14,7 +19,7 @@ class UnidadController extends Controller
     {
         $unidades = Unidad::all();
 
-        return view("admin.unidades.index", compact("unidades"));
+        return view("controlador.unidades.index", compact("unidades"));
     }
 
     /**
@@ -22,7 +27,7 @@ class UnidadController extends Controller
      */
     public function create()
     {
-        return view("admin.unidades.create");
+        return view("controlador.unidades.create");
     }
 
     /**
@@ -37,7 +42,7 @@ class UnidadController extends Controller
         
         Unidad::create($request->all());
 
-        return redirect()->route('admin.unidades.index')
+        return redirect()->route('controlador.unidades.index')
             ->with('success','Unidad de medida guardada correctamente');
     }
 
@@ -48,7 +53,7 @@ class UnidadController extends Controller
     {
         $unidad = Unidad::where('visible', true)->find($id);
 
-        return view('admin.unidades.show', compact('unidad'));
+        return view('controlador.unidades.show', compact('unidad'));
     }
 
     /**
@@ -58,7 +63,7 @@ class UnidadController extends Controller
     {
         $unidad = Unidad::findOrFail($id);
 
-        return view('admin.unidades.edit', compact('unidad'));
+        return view('controlador.unidades.edit', compact('unidad'));
     }
 
     /**
@@ -78,7 +83,7 @@ class UnidadController extends Controller
             'descripcion'=> $request->descripcion
         ]);
 
-        return redirect()->route('admin.unidades.index')
+        return redirect()->route('controlador.unidades.index')
             ->with('success','Unidad de medida guardada correctamente');
     }
 
@@ -90,7 +95,7 @@ class UnidadController extends Controller
         $unidad = Unidad::find($id);
 
         if (!$unidad) {
-            return redirect()->route('admin.items.index')
+            return redirect()->route('controlador.items.index')
                 ->with('error', 'El item con ID ' . $id . ' no fue encontrado.');
         }
 
@@ -98,7 +103,7 @@ class UnidadController extends Controller
 
         $unidad->save();
 
-        return redirect()->route('admin.tipos.index')
+        return redirect()->route('controlador.tipos.index')
             ->with('success', 'Unidad de medida eliminado correctamente');
     }
 }

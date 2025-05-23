@@ -14,13 +14,23 @@ class RolMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $rol): Response
+    public function handle(Request $request, Closure $next, $roles): Response
     {
         $user = Auth::user();
-        if ($user && $user->rolActivo() && $user->rolActivo()->nombre === $rol) {
+
+        // Convertir la lista de roles en un array
+        $rolesArray = explode(',', $roles);
+
+        if ($user && $user->rolActivo() && in_array($user->rolActivo()->nombre, $rolesArray)) {
             return $next($request);
         }
 
         abort(403, 'Acceso no autorizado');
+        /* $user = Auth::user();
+        if ($user && $user->rolActivo() && $user->rolActivo()->nombre === $rol) {
+            return $next($request);
+        }
+
+        abort(403, 'Acceso no autorizado'); */
     }
 }

@@ -8,6 +8,11 @@ use App\Models\Item;
 
 class IngredienteController extends Controller
 {
+    public function panel()
+    {
+        return view('controlador.ingredientes.panel');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -15,7 +20,7 @@ class IngredienteController extends Controller
     {
         $ingrediente = Ingrediente::all();
 
-        return view("admin.ingredientes.index", compact("ingrediente"));
+        return view("controlador.ingredientes.index", compact("ingrediente"));
     }
 
      /**
@@ -23,7 +28,7 @@ class IngredienteController extends Controller
      */
     public function create()
     {
-        return view("admin.ingredientes.create");
+        return view("controlador.ingredientes.create");
     }
 
     /**
@@ -54,7 +59,7 @@ class IngredienteController extends Controller
             'observacion' => $request->observacion
         ]);
 
-        return redirect()->route('admin.ingredientes.index')
+        return redirect()->route('controlador.ingredientes.index')
             ->with('success','El ingrediente fue almacenado exitosamente');
     }
 
@@ -66,11 +71,11 @@ class IngredienteController extends Controller
         $ingrediente = Ingrediente::where('visible', true)->with('item')->find($id);
         
         if (!$ingrediente) {
-            return redirect()->route('admin.ingredientes.index')
+            return redirect()->route('controlador.ingredientes.index')
                 ->with('error', 'El ingrediente con ID ' . $id . ' no fue encontrado.');
         }
 
-        return view('admin.ingredientes.show', compact('ingrediente'));
+        return view('controlador.ingredientes.show', compact('ingrediente'));
     }
 
     /**
@@ -97,7 +102,7 @@ class IngredienteController extends Controller
             'observacion' => $request->observacion
         ]);
 
-        return redirect()->route('admin.ingredientes.index')
+        return redirect()->route('controlador.ingredientes.index')
             ->with('success','El ingrediente fue almacenado correctamente');
     }
 
@@ -109,14 +114,14 @@ class IngredienteController extends Controller
         $ingrediente = Ingrediente::find($id);
 
         if (!$ingrediente) {
-            return redirect()->route('admin.ingredientes.index')
+            return redirect()->route('controlador.ingredientes.index')
                 ->with('error','El ingrediente con el id '. $id . ' no fue encontrado');
         }
 
         // Si el ingrediente existe, proceder con la eliminación
         $ingrediente->update(['visible' => false]);
 
-        return redirect()->route('admin.ingredientes.index')
+        return redirect()->route('controlador.ingredientes.index')
             ->with('success','El ingrediente fue eliminado correctamente');
     }
 }

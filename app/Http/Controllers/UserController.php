@@ -9,12 +9,17 @@ use App\Models\User;
 
 class UserController extends Controller
 {
+    public function panel()
+    {
+        return view('controlador.usuarios.panel');
+    }
+
     public function index()
     {
         // Cargamos la relación hasta persona para mostrar el nombre
         $usuarios = User::with('empleado.persona')->where('visible', true)->get();
         
-        return view('admin.usuarios.index', compact('usuarios'));
+        return view('controlador.usuarios.index', compact('usuarios'));
     }
 
     public function create()
@@ -25,7 +30,7 @@ class UserController extends Controller
             ->with('persona')
             ->get();
 
-        return view('admin.usuarios.create', compact('empleados'));
+        return view('controlador.usuarios.create', compact('empleados'));
     }
 
     public function store(Request $request)
@@ -44,21 +49,21 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('admin.usuarios.index')->with('success', 'Usuario creado correctamente.');
+        return redirect()->route('controlador.usuarios.index')->with('success', 'Usuario creado correctamente.');
     }
 
     public function show($id)
     {
         $usuario = User::with('empleado.persona')->findOrFail($id);
         
-        return view('admin.usuarios.show', compact('usuario'));
+        return view('controlador.usuarios.show', compact('usuario'));
     }
 
     public function edit($id)
     {
         $usuario = User::with('empleado.persona')->findOrFail($id);
 
-        return view('admin.usuarios.edit', compact('usuario'));
+        return view('controlador.usuarios.edit', compact('usuario'));
     }
 
     public function update(Request $request, $id)
@@ -80,7 +85,7 @@ class UserController extends Controller
 
         $usuario->save();
 
-        return redirect()->route('admin.usuarios.index')
+        return redirect()->route('controlador.usuarios.index')
             ->with('success', 'Usuario actualizado.');
     }
 
@@ -92,7 +97,7 @@ class UserController extends Controller
         
         $usuario->save();
 
-        return redirect()->route('admin.usuarios.index')
+        return redirect()->route('controlador.usuarios.index')
             ->with('success', 'Usuario eliminado correctamente.');
     }
 }

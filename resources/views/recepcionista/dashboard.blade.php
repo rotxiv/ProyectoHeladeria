@@ -1,6 +1,6 @@
 @extends('layouts.generico')
 
-@section('title', 'Panel de Camarero')
+@section('title', 'Panel de Recepcionista')
 
 @section('sidebar')
     <h4 style="color: #bdc3c7; padding: 10px 20px;">Opciones</h4>

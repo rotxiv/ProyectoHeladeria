@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('item_id')->unique();
             $table->string('nombre');
-            $table->string('tipo_id')->unique();
-            $table->string('sabor_id')->unique();            
+            $table->unsignedBigInteger('tipo_id');
+            $table->unsignedBigInteger('sabor_id');            
             $table->text('observacion');
             $table->boolean('visible')->default(true);
             $table->timestamps();

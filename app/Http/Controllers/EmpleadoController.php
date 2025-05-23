@@ -10,7 +10,7 @@ class EmpleadoController extends Controller
 {
     public function panel()
     {
-        return view('admin.empleados.panel');
+        return view('controlador.empleados.panel');
     }
 
     public function index()
@@ -18,12 +18,12 @@ class EmpleadoController extends Controller
         $empleados = Empleado::with('persona')
             ->where('visible', true)->get();
         
-        return view('admin.empleados.index', compact('empleados'));
+        return view('controlador.empleados.index', compact('empleados'));
     }
 
     public function create()
     {
-        return view('admin.empleados.create');
+        return view('controlador.empleados.create');
     }
 
     public function store(Request $request)
@@ -48,23 +48,35 @@ class EmpleadoController extends Controller
             'direccion' => $request->direccion,
         ]);
 
-        return redirect()->route('admin.empleados.index')
-            ->with('success', 'Empleado creado correctamente.');
+        return view(
+            'controlador.empleados.panel', 
+            ['error' => 'El empleado el empleado fue añadido con exito']
+        );
+         //redirect()->route('controlador.empleados.index')
+            //->with('success', 'Empleado creado correctamente.');
     }
 
     public function show($id)
     {
         //$empleado = Empleado::with('persona')->findOrFail($id);
-        $empleado = Empleado::where('visible', true)->with('persona')->find($id);
-        
-        return view('admin.empleados.show', compact('empleado'));
+        $empleado = Empleado::where('visible', true)
+            ->with('persona')->find($id);
+
+        if (!$empleado) {
+            return view(
+                'controlador.empleados.panel', 
+                ['error' => 'El empleado con el ID ' . $id . ' no fue encontrado']
+            );
+        }
+
+        return view('controlador.empleados.show', compact('empleado'));
     }
 
     public function edit($id)
     {
         $empleado = Empleado::with('persona')->findOrFail($id);
 
-        return view('admin.empleados.edit', compact('empleado'));
+        return view('controlador.empleados.edit', compact('empleado'));
     }
 
     public function update(Request $request, $id)
@@ -88,7 +100,7 @@ class EmpleadoController extends Controller
             'direccion' => $request->input('empleado.direccion')
         ]);
 
-        return redirect()->route('admin.empleados.index')
+        return redirect()->route('controlador.empleados.index')
             ->with('success', 'El empleado fue actualizado correctamente.');
     }
 
@@ -97,7 +109,7 @@ class EmpleadoController extends Controller
         $empleado = Empleado::findOrFail($id);
 
         if (!$empleado) {
-            return redirect()->route('admin.empleados.index')
+            return redirect()->route('empleados.index')
                 ->with('error','El empleado con el id '. $id . ' no fue encontrado');
         }
 
@@ -105,8 +117,24 @@ class EmpleadoController extends Controller
         
         $empleado->save();
 
-        return redirect()->route('admin.empleados.index')
+        return redirect()->route('controlador.empleados.index')
             ->with('success', 'El empleado eliminado correctamente.');
     }
 
+    public function showByCarnet($carnet)
+    {
+        $empleado = Empleado::where('carnet', $carnet)
+                        ->where('visible', true)
+                        ->with('persona')
+                        ->firstOrFail();
+
+        if (!$empleado) {
+            return view(
+                'controlador.empleados.panel', 
+                ['error' => 'El empleado con el Carnet ' . $carnet . ' no fue encontrado']
+            );
+        }
+
+        return view('controlador.empleados.show', compact('empleado'));
+    }
 }
