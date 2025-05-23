@@ -14,10 +14,9 @@ class UserSeeder extends Seeder
     {
         $user = User::factory()->create([
             'empleado_id' => 1,
-            'name' => 'Victor',
-            'email' => 'victor@example.com',
+            'name' => 'Raul',
+            'email' => 'raul@example.com',
             'password'=> bcrypt('password123'),
-            'visible' => true,
         ]);
 
         $user->roles()->attach(1, ['fecha_asignacion' => now()]);

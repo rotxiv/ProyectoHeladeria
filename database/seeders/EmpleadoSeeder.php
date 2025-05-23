@@ -15,14 +15,14 @@ class EmpleadoSeeder extends Seeder
     {
         // Verifica que existan personas antes de asignarlas a empleados
         $persona1 = Persona::firstOrCreate([
-            'carnet' => '8880196',
-            'nombre' => 'Victor Hugo Mamani Copa',
-            'telefono' => '69118575',
+            'carnet' => '8081190',
+            'nombre' => 'Raul Hugo Lopez Copa',
+            'telefono' => '60000575',
         ]);
         
         Empleado::create([
             'persona_id' => $persona1->id,
-            'direccion' => 'Barrio: 26 de Septiembre Norte',
+            'direccion' => 'Barrio: 34 de Septiembre Este',
             'visible' => true,
         ]);
     }
