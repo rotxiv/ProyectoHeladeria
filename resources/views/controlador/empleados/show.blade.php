@@ -1,4 +1,4 @@
-@extends('layouts.' . strtolower(Auth::user()->rolActivo()->nombre))
+@extends('layouts.app')
 
 @section('title', 'Detalle del Empleado')
 
@@ -33,8 +33,8 @@
         </div>
 
         <div class="actions">
-            <a href="{{ route(name: 'empleados.panel') }}" class="btn gray">Volver</a>
-            <a href="{{ route('empleados.edit', $empleado->id) }}" class="btn orange">Editar</a>
+            <a href="{{ route(name: 'gerente.empleados.panel') }}" class="btn gray">Volver</a>
+            <a href="{{ route('gerente.empleados.edit', $empleado->id) }}" class="btn orange">Editar</a>
         </div>
     </div>
 </div>

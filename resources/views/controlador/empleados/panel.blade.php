@@ -1,15 +1,20 @@
-@extends('layouts.' . strtolower(Auth::user()->rolActivo()->nombre))
+@extends('layouts.app')
 
 @section('title', 'Panel de Empleados')
 
 @section('content')
+
+@php
+    $rol = strtolower(Auth::user()->rolActivo()->nombre);
+@endphp
+
 <div class="container">
     <h2 class="page-title">Panel de Empleados</h2>
 
     <div class="card">
         <ul class="panel-options">
-            <li><a href="{{ route('empleados.index') }}">📋 Listar empleados</a></li>
-            <li><a href="{{ route('empleados.create') }}">➕ Crear nuevo empleado</a></li>
+            <li><a href="{{ route($rol.'.empleados.index') }}">📋 Listar empleados</a></li>
+            <li><a href="{{ route($rol.'.empleados.create') }}">➕ Crear nuevo empleado</a></li>
             <li><a href="#">🔍 Buscar empleado (próximamente)</a></li>
         </ul>
     </div>
@@ -17,6 +22,7 @@
 
 <style>
     .container {
+        transform: translateX(50px);
         max-width: 700px;
         margin: 40px auto;
         padding: 20px;

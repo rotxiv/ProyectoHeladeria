@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\Cliente;
 use App\Models\Empleado;
 use App\Models\Ingrediente;
+use App\Models\Tipo;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -15,11 +17,12 @@ use App\Http\Controllers\UnidadController;
 use App\Http\Controllers\IngredienteController;
 use App\Http\Controllers\ProductoController;  
 
+/* Pagina de inicio */
 Route::get('/', function () {
     return view('principal');
-})->name('principal'); // pagina de inicio.
+})->name('principal');
 
-// Login
+/* Pagina de inicio y cierre de sesión */
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -28,7 +31,71 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ---------------- Autenticación general ----------------
 Route::middleware(['auth'])->group(function () {
 
-    Route::middleware('rol:Administrador')->group(function () {
+    Route::middleware(['rol:Administrador'])->prefix('administrador')->name('administrador.')->group(function () {
+        
+        /* Panel principal del administrador */
+        Route::get('/', fn() => view('administrador.dashboard'))->name('dashboard');
+        
+        /* Paneles para cada controlador */
+        Route::get('empleados/panel', [EmpleadoController::class, 'panel'])->name('empleados.panel');
+        Route::get('clientes/panel', [ClienteController::class, 'panel'])->name('clientes.panel');
+        Route::get('usuarios/panel', [UserController::class, 'panel'])->name('usuarios.panel');
+        Route::get('roles/panel', [RolController::class, 'panel'])->name('roles.panel');
+        Route::get('productos/panel', [ProductoController::class, 'panel'])->name('productos.panel');
+        Route::get('ingredientes/panel', [IngredienteController::class, 'panel'])->name('ingredientes.panel');
+        Route::get('tipos/panel', [TipoController::class, 'panel'])->name('tipos.panel');
+        Route::get('sabores/panel', [SaborController::class, 'panel'])->name('sabores.panel');
+        Route::get('unidades/panel', [UnidadController::class, 'panel'])->name('unidades.panel');
+
+        Route::resource('empleados', EmpleadoController::class);
+        Route::resource('clientes', ClienteController::class);
+        Route::resource('usuarios', UserController::class);
+        Route::resource('roles', RolController::class);
+        Route::resource('productos', ProductoController::class);
+        Route::resource('ingredientes', IngredienteController::class);
+        Route::resource('tipos', TipoController::class);
+        Route::resource('sabores', SaborController::class);
+        Route::resource('unidades', UnidadController::class);
+    });
+
+    Route::middleware(['rol:Gerente'])->prefix('gerente')->name('gerente.')->group(function () {
+        
+        /* Panel principal del Gerente */
+        Route::get('/', fn() => view('gerente.dashboard'))->name('dashboard');
+        
+        /* Paneles para cada controlador */
+        Route::get('empleados/panel', [EmpleadoController::class, 'panel'])->name('empleados.panel');
+        Route::get('clientes/panel', [ClienteController::class, 'panel'])->name('clientes.panel');
+        Route::get('usuarios/panel', [UserController::class, 'panel'])->name('usuarios.panel');
+        Route::get('roles/panel', [RolController::class, 'panel'])->name('roles.panel');
+
+        Route::resource('empleados', EmpleadoController::class);
+        Route::resource('clientes', ClienteController::class);
+        Route::resource('usuarios', UserController::class);
+        Route::resource('roles', RolController::class);
+    });
+
+    /* Panel principal del encargado de cocina */
+    Route::middleware(['rol:EncargadoCocina'])->prefix('encargado-cocina')->name('encargado-cocina.')->group(function () {
+        
+        /* Panel principal del encargado de cocina */
+        Route::get('/', fn() => view('encargadococina.dashboard'))->name('dashboard');
+        
+        /* Paneles para cada controlador */
+        Route::get('productos/panel', [ProductoController::class, 'panel'])->name('productos.panel');
+        Route::get('ingredientes/panel', [IngredienteController::class, 'panel'])->name('ingredientes.panel');
+        Route::get('tipos/panel', [TipoController::class, 'panel'])->name('tipos.panel');
+        Route::get('sabores/panel', [SaborController::class, 'panel'])->name('sabores.panel');
+        Route::get('unidades/panel', [UnidadController::class, 'panel'])->name('unidades.panel');
+
+        Route::resource('productos', ProductoController::class);
+        Route::resource('ingredientes', IngredienteController::class);
+        Route::resource('tipos', TipoController::class);
+        Route::resource('sabores', SaborController::class);
+        Route::resource('unidades', UnidadController::class);
+    });
+});
+    /* Route::middleware('rol:Administrador')->group(function () {
         Route::get('/administrador', fn() => view('administrador.dashboard'))
             ->name('administrador');
     });
@@ -46,7 +113,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     /* Rutas a los controladores */
-    Route::resource('roles', RolController::class)
+/*     Route::resource('roles', RolController::class)
         ->middleware(['rol:Administrador']);
     Route::get('roles/panel', [RolController::class, 'panel'])
         ->middleware(['rol:Administrador'])
@@ -99,33 +166,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('unidades/panel', [UnidadController::class, 'panel'])
         ->middleware(['rol:Administrador,EncargadoCocina'])
         ->name('unidades.panel');
-
-
+ */
+ 
     // ---------------- ADMINISTRADOR ----------------
-    //Route::middleware(['rol:Administrador'])->prefix('admin')->name('admin.')->group(function () {
-        
-       // Route::get('/', fn() => view('admin.dashboard'))
-        //    ->name('dashboard');
-        
-        // Paneles
-        //Route::get('empleados/panel', [EmpleadoController::class, 'panel'])
-          //  ->name('empleados.panel');
-
-        // Recursos completos del administrador
-        //Route::resource('empleados', EmpleadoController::class);
-
-        //Route::resources([
-          //  'clientes' => ClienteController::class,
-           // 'usuarios' => UserController::class,
-          //  'roles' => RolController::class,
-          //  'tipos' => TipoController::class,
-          //  'sabores' => SaborController::class,
-           // 'unidades' => UnidadController::class,
-           // 'productos' => ProductoController::class,
-           // 'ingredientes' => IngredienteController::class,
-        //]);
-
-    //});
+    
 
     /* // ---------------- ENCARGADO DE COCINA ----------------
     Route::middleware(['rol:Encargado de cocina'])->prefix('cocina')->name('cocina.')->group(function () {
@@ -151,7 +195,7 @@ Route::middleware(['auth'])->group(function () {
         );
     }); */
 
-});
+//});
 
 /* Route::get('/camarero', function () {
     return view('camarero.dashboard');

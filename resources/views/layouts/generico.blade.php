@@ -87,17 +87,17 @@
     <div class="sidebar">
         <div class="user-sidebar-info" style="text-align: center; padding: 15px; border-bottom: 1px solid #7f8c8d;">
             <div class="avatar-circle" style="
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background-color: #2980b9;
-            color: white;
-            font-size: 28px;
-            line-height: 70px;
-            margin: 0 auto 10px;
-            font-weight: bold;
-            text-transform: uppercase;
-        ">
+                    width: 70px;
+                    height: 70px;
+                    border-radius: 50%;
+                    background-color: #2980b9;
+                    color: white;
+                    font-size: 28px;
+                    line-height: 70px;
+                    margin: 0 auto 10px;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                ">
                 {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
             </div>
             <strong style="color: #ecf0f1;">{{ Auth::user()->name ?? 'Usuario' }}</strong>

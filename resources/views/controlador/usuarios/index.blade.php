@@ -1,11 +1,15 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Usuarios')
+
+@php
+    $rol = strtolower(Auth::user()->rolActivo()->nombre);
+@endphp
 
 @section('content')
     <h2>Listado de Usuarios</h2>
 
-    <a href="{{ route('admin.usuarios.create') }}" class="button">Crear nuevo usuario</a>
+    <a href="{{ route($rol.'.usuarios.create') }}" class="button">Crear nuevo usuario</a>
 
     <table>
         <thead>
@@ -27,8 +31,8 @@
                         {{ $usuario->empleado->persona->nombre ?? 'Sin empleado' }}
                     </td>
                     <td>
-                        <a href="{{ route('admin.usuarios.edit', $usuario->id) }}">Editar</a> |
-                        <form action="{{ route('admin.usuarios.destroy', $usuario->id) }}" method="POST" style="display:inline;">
+                        <a href="{{ route($rol.'.usuarios.edit', $usuario->id) }}">Editar</a> |
+                        <form action="{{ route($rol.'.usuarios.destroy', $usuario->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button onclick="return confirm('¿Deseas eliminar este usuario?')">Eliminar</button>

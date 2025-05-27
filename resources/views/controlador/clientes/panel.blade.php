@@ -1,7 +1,5 @@
 @extends('layouts.' . strtolower(Auth::user()->rolActivo()->nombre))
 
-@section('title', 'Panel de Clientes')
-
 @section('content')
 <div class="container">
     <h2 class="page-title">Panel de clientes</h2>

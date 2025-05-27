@@ -1,15 +1,20 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Panel de Usuarios')
 
 @section('content')
+
+@php
+    $rol = strtolower(Auth::user()->rolActivo()->nombre);
+@endphp
+
 <div class="container">
     <h2 class="page-title">Panel de Usuarios</h2>
 
     <div class="card">
         <ul class="panel-options">
-            <li><a href="{{ route('usuarios.index') }}">📋 Listar usuarios</a></li>
-            <li><a href="{{ route('ususarios.create') }}">➕ Crear nuevo usuario</a></li>
+            <li><a href="{{ route($rol.'.usuarios.index') }}">📋 Listar usuarios</a></li>
+            <li><a href="{{ route($rol.'.usuarios.create') }}">➕ Crear nuevo usuario</a></li>
             <li><a href="#">🔍 Buscar usuario (próximamente)</a></li>
         </ul>
     </div>

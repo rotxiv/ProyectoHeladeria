@@ -1,12 +1,17 @@
-@extends('layouts.' . strtolower(Auth::user()->rolActivo()->nombre))
+@extends('layouts.app')
 
 @section('content')
+
+@php
+    $rol = strtolower(Auth::user()->rolActivo()->nombre);
+@endphp
+
 <div class="container mt-4">
     <h1 class="text-center mb-4 text-primary">Editar Empleado</h1>
 
     <div class="card shadow-lg">
         <div class="card-body">
-            <form action="{{ route('empleados.update', $empleado->id) }}" method="POST">
+            <form action="{{ route($rol.'.empleados.update', $empleado->id) }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -36,7 +41,7 @@
                     <button type="submit" class="btn btn-primary btn-lg">
                         <i class="fas fa-save"></i> Guardar cambios
                     </button>
-                    <a href="{{ route('empleados.panel') }}" class="btn btn-secondary btn-lg">
+                    <a href="{{ route($rol.'.empleados.panel') }}" class="btn btn-secondary btn-lg">
                         <i class="fas fa-times"></i> Cancelar
                     </a>
                 </div>

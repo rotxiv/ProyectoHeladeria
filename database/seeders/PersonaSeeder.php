@@ -14,15 +14,15 @@ class PersonaSeeder extends Seeder
     public function run(): void
     {
         Persona::create([
-            'carnet' => '8081190',
-            'nombre' => 'Raul Hugo Lopez Copa',
-            'telefono' => '60000575',
+            'carnet' => '8880123',
+            'nombre' => 'Victor Hugo Mamani Copa',
+            'telefono' => '60033810'
         ]);
 
-        Persona::create([
+        /* Persona::create([
             'carnet' => '1881267',
             'nombre' => 'Yolanda Copa Hernandez',
             'telefono' => '62132050',
-        ]);
+        ]); */
     }
 }

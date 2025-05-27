@@ -24,8 +24,30 @@ class RolSeeder extends Seeder
         ]);
 
         Rol::create([
+            'nombre' => 'Gerente',
+            'descripcion' => 'Acceso a administrar Personas, Usuarios y Roles.',
+            'permisos' => json_encode([
+                'crear_usuario' => true,
+                'editar_usuario' => true,
+                'eliminar_usuario' => true,
+                'ver_reportes' => true
+            ])
+        ]);
+
+        Rol::create([
+            'nombre' => 'EncargadoCocina',
+            'descripcion' => 'Acceso al sector de cocicna.',
+            'permisos' => json_encode([
+                'crear_usuario' => false,
+                'editar_usuario' => false,
+                'eliminar_usuario' => false,
+                'ver_reportes' => true
+            ])
+        ]);
+
+        Rol::create([
             'nombre' => 'Camarero',
-            'descripcion' => 'Acceso básico.',
+            'descripcion' => 'Acceso al menú del dia, registrar ordenes de los clientes.',
             'permisos' => json_encode([
                 'crear_usuario' => false,
                 'editar_usuario' => false,

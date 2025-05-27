@@ -1,6 +1,11 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('content')
+
+@php
+    $rol = strtolower(Auth::user()->rolActivo()->nombre);
+@endphp
+
 <div class="container">
     <h1>Detalles del Usuario</h1>
 
@@ -19,7 +24,7 @@
         </div>
     </div>
 
-    <a href="{{ route('admin.users.index') }}" class="btn btn-primary mt-3">Volver a la lista</a>
+    <a href="{{ route($rol.'.usuarios.panel') }}" class="btn btn-primary mt-3">Volver</a>
 </div>
 @endsection
 

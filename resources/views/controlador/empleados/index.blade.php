@@ -1,13 +1,18 @@
-@extends('layouts.' . strtolower(Auth::user()->rolActivo()->nombre))
+@extends('layouts.app')
 
 @section('title', 'Empleados')
 
 @section('content')
+
+@php
+    $rol = strtolower(Auth::user()->rolActivo()->nombre);
+@endphp
+
 <div class="container">
     <h2 class="page-title">Listado de Empleados</h2>
 
     <div class="actions">
-        <a href="{{ route('empleados.create') }}" class="btn green">
+        <a href="{{ route($rol.'.empleados.create') }}" class="btn green">
             &#x2795; Crear nuevo empleado
         </a>
     </div>
@@ -29,9 +34,9 @@
                         <td>{{ $empleado->persona->carnet ?? '-' }}</td>
                         <td>{{ $empleado->cargo ?? '-' }}</td>                        
                          <td>
-                            <a href="{{ route('empleados.show', $empleado->id) }}" class="btn blue">Ver</a>
-                            <a href="{{ route('empleados.edit', $empleado->id) }}" class="btn orange">Editar</a>
-                            <form action="{{ route('empleados.destroy', $empleado->id) }}" method="POST" style="display:inline;">
+                            <a href="{{ route($rol.'.empleados.show', $empleado->id) }}" class="btn blue">Ver</a>
+                            <a href="{{ route($rol.'.empleados.edit', $empleado->id) }}" class="btn orange">Editar</a>
+                            <form action="{{ route($rol.'.empleados.destroy', $empleado->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn red" onclick="return confirm('¿Eliminar este empleado?')">Eliminar</button>
@@ -46,6 +51,7 @@
 
 <style>
     .container {
+        transform: translateX(50px);
         max-width: 1000px;
         margin: 40px auto;
         padding: 20px;

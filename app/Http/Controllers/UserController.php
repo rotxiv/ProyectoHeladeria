@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Empleado;
 use App\Models\User;
+use App\Models\Rol;
+
 
 class UserController extends Controller
 {
@@ -30,26 +32,35 @@ class UserController extends Controller
             ->with('persona')
             ->get();
 
-        return view('controlador.usuarios.create', compact('empleados'));
+        //obtener la lista de roles para enviarselo a la vista create
+        $roles = Rol::all();
+
+        return view('controlador.usuarios.create', compact('empleados','roles'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'empleado_id' => 'required|exists:empleados,id|unique:users,empleado_id',
+            'rol_id' => 'required|exists:roles,id',
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        User::create([
+        $user = User::create([
             'empleado_id' => $request->empleado_id,
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => bcrypt($request->password),
+            //Hash::make($request->password),
         ]);
 
-        return redirect()->route('controlador.usuarios.index')->with('success', 'Usuario creado correctamente.');
+        $user->roles()->attach($request->rol_id, ['fecha_asignacion' => now()]);
+
+        return view('controlador.usuarios.panel');
+
+        /* return redirect()->route('controlador.usuarios.index')->with('success', 'Usuario creado correctamente.'); */
     }
 
     public function show($id)
@@ -80,7 +91,7 @@ class UserController extends Controller
         $usuario->email = $request->email;
 
         if ($request->filled('password')) {
-            $usuario->password = Hash::make($request->password);
+            $usuario->password = bcrypt($request->password);
         }
 
         $usuario->save();

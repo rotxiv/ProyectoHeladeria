@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>@yield('title', 'Panel de Administrador')</title>
+    <title>@yield('title', 'Panel del Gerente')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -143,25 +143,16 @@
             <strong style="color: #ecf0f1;">{{ Auth::user()->name ?? 'Usuario' }}</strong>
         </div>
 
-        <a href="{{ route('administrador.dashboard') }}" style="display: block; padding: 10px 20px; font-size: 16px; color: #ecf0f1; text-decoration: none; background-color: #2980b9;">
+        <a href="{{ route('gerente.dashboard') }}" style="display: block; padding: 10px 20px; font-size: 16px; color: #ecf0f1; text-decoration: none; background-color: #2980b9;">
             Panel Principal
         </a>
 
         <h4 onclick="toggleMenu('menu-personas')">Administrar Personas</h4>
         <div class="submenu" id="menu-personas">
-            <a href="{{ route('administrador.empleados.panel') }}">Gestionar empleados</a>
-            <a href="{{ route('administrador.clientes.panel') }}">Gestionar clientes</a>
-            <a href="{{ route('administrador.roles.panel') }}">Gestionar roles</a>
-            <a href="{{ route('administrador.usuarios.panel') }}">Gestionar usuarios</a>
-        </div>
-
-        <h4 onclick="toggleMenu('menu-cocina')">Administrar Cocina</h4>
-        <div class="submenu" id="menu-cocina">
-            <a href="{{ route('administrador.productos.panel') }}">Gestionar productos</a>
-            <a href="{{ route('administrador.ingredientes.panel') }}">Gestionar ingredientes</a>
-            <a href="{{ route('administrador.sabores.panel') }}">Gestionar sabores</a>
-            <a href="{{ route('administrador.tipos.panel') }}">Gestionar tipos de productos</a>
-            <a href="{{ route('administrador.unidades.panel') }}">Gestionar unidades de medida</a>
+            <a href="{{ route('gerente.empleados.panel') }}">Gestionar empleados</a>
+            <a href="{{ route('gerente.clientes.panel') }}">Gestionar clientes</a>
+            <a href="{{ route('gerente.roles.panel') }}">Gestionar roles</a>
+            <a href="{{ route('gerente.usuarios.panel') }}">Gestionar usuarios</a>
         </div>
 
         <!-- @yield('sidebar') -->
