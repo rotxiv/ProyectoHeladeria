@@ -13,7 +13,7 @@ class Persona extends Model
     protected $primaryKey = 'id';
     public $incrementing = true; // Asegurar autoincremento    
     protected $keyType = 'integer';
-    protected $fillable = ['carnet', 'nombre', 'telefono'];
+    protected $fillable = ['nombre', 'telefono'];
 
     public function cliente()
     {

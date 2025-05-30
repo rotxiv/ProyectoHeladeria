@@ -9,14 +9,32 @@
 @endphp
 
 <div class="container">
+
+    @if(isset($mensaje))
+        <div class="alert alert-success">
+            {{ $mensaje }}
+        </div>
+    @endif
+
     <h2 class="page-title">Panel de Empleados</h2>
 
     <div class="card">
         <ul class="panel-options">
             <li><a href="{{ route($rol.'.empleados.index') }}">📋 Listar empleados</a></li>
             <li><a href="{{ route($rol.'.empleados.create') }}">➕ Crear nuevo empleado</a></li>
-            <li><a href="#">🔍 Buscar empleado (próximamente)</a></li>
         </ul>
+
+        <hr class="my-4">
+
+        <h5 class="mb-3">🔍 Buscar empleado por carnet</h5>
+        <form action="{{ route($rol.'.empleados.showByCarnet') }}" method="GET">
+            <div class="mb-3">
+                <label for="carnet" class="form-label">Carnet</label>
+                <input type="text" name="carnet" id="carnet" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+
     </div>
 </div>
 
@@ -59,6 +77,10 @@
 
     .panel-options a:hover {
         text-decoration: underline;
+    }
+
+    input.form-control {
+        max-width: 300px;
     }
 </style>
 @endsection

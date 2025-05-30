@@ -43,24 +43,24 @@ class EmpleadoController extends Controller
         ]);
 
         // Crear empleado
-        Empleado::create([
+        $temp = Empleado::create([
             'persona_id' => $persona->id,
             'direccion' => $request->direccion,
         ]);
 
-        return view(
-            'controlador.empleados.panel', 
-            ['error' => 'El empleado el empleado fue añadido con exito']
-        );
-         //redirect()->route('controlador.empleados.index')
-            //->with('success', 'Empleado creado correctamente.');
+        $empleado = Empleado::where('visible', true)
+            ->with('persona')
+            ->find($temp->id);
+
+        return view('controlador.empleados.show', compact('empleado'));
+
     }
 
     public function show($id)
     {
-        //$empleado = Empleado::with('persona')->findOrFail($id);
         $empleado = Empleado::where('visible', true)
-            ->with('persona')->find($id);
+            ->with('persona')
+            ->find($id);
 
         if (!$empleado) {
             return view(
@@ -83,25 +83,28 @@ class EmpleadoController extends Controller
     {
         // Validar los datos del formulario
         $request->validate([
-            'persona.carnet' => 'required|unique:personas,carnet,' . $request->input('persona.id'),
+            'persona.carnet' => 'required|unique:personas,carnet,' .$id,
             'persona.nombre' => 'required|string',
             'persona.telefono' => 'nullable|string',
             'empleado.direccion' => 'nullable|string',
         ]);
 
-        // Obtener el empleado
-        $empleado = Empleado::findOrFail($id);
+        // Obtener el empleado de forma temporal
+        $temp = Empleado::findOrFail($id);
 
-        // Actualizar los datos de la Persona asociada
-        $empleado->persona->update($request->input('persona'));
+        // Actualizar los datos de la Persona asociada al empleado
+        $temp->persona->update($request->input('persona'));
 
         // Actualizar los datos del Empleado
-        $empleado->update([
+        $temp->update([
             'direccion' => $request->input('empleado.direccion')
         ]);
 
-        return redirect()->route('controlador.empleados.index')
-            ->with('success', 'El empleado fue actualizado correctamente.');
+        $empleado = Empleado::where('visible', true)
+            ->with('persona')
+            ->find($temp->id);
+
+        return view('controlador.empleados.show', compact('empleado'));
     }
 
     public function destroy($id)
@@ -109,29 +112,43 @@ class EmpleadoController extends Controller
         $empleado = Empleado::findOrFail($id);
 
         if (!$empleado) {
-            return redirect()->route('empleados.index')
-                ->with('error','El empleado con el id '. $id . ' no fue encontrado');
+            return view('controlador.empleados.panel', ['mensaje' => '¡El empleado no fue encontrado...!']);
         }
 
         $empleado->visible = false;
         
         $empleado->save();
 
-        return redirect()->route('controlador.empleados.index')
-            ->with('success', 'El empleado eliminado correctamente.');
+        return view('controlador.empleados.panel', ['mensaje' => '¡El empleado fue eliminado correctamente...!']);
     }
 
     public function showByCarnet($carnet)
     {
-        $empleado = Empleado::where('carnet', $carnet)
+ 
+        /* $request->validate([
+            'carnet' => 'required|string'
+        ]); */
+
+        dd($carnet);
+
+        $empleado = Empleado::where('visible', true)
+            ->whereHas('persona', function ($query) use ($carnet) {
+                $query->where('carnet', $carnet);
+            })->with('persona')->first();
+        
+        /* $empleado = Empleado::whereHas('persona', function ($query) use ($request) {
+                $query->where('carnet', $request->carnet);
+            })->with('persona')->first(); */
+
+        /* $empleado = Empleado::where('carnet', $request->carnet)
                         ->where('visible', true)
                         ->with('persona')
-                        ->firstOrFail();
+                        ->firstOrFail(); */
 
         if (!$empleado) {
             return view(
                 'controlador.empleados.panel', 
-                ['error' => 'El empleado con el Carnet ' . $carnet . ' no fue encontrado']
+                ['mensaje' => 'El empleado con el Carnet ' . $carnet . ' no fue encontrado']
             );
         }
 

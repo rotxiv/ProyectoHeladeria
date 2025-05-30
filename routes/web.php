@@ -1,10 +1,7 @@
 <?php
 
-use App\Models\Cliente;
-use App\Models\Empleado;
-use App\Models\Ingrediente;
-use App\Models\Tipo;
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AuthController;
 
 use App\Http\Controllers\ClienteController;
@@ -15,7 +12,8 @@ use App\Http\Controllers\SaborController;
 use App\Http\Controllers\TipoController;
 use App\Http\Controllers\UnidadController;
 use App\Http\Controllers\IngredienteController;
-use App\Http\Controllers\ProductoController;  
+use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\BitacoraController;
 
 /* Pagina de inicio */
 Route::get('/', function () {
@@ -37,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', fn() => view('administrador.dashboard'))->name('dashboard');
         
         /* Paneles para cada controlador */
+        Route::get('bitacoras/panel', [BitacoraController::class,'panel'])->name('bitacoras.panel');
         Route::get('empleados/panel', [EmpleadoController::class, 'panel'])->name('empleados.panel');
         Route::get('clientes/panel', [ClienteController::class, 'panel'])->name('clientes.panel');
         Route::get('usuarios/panel', [UserController::class, 'panel'])->name('usuarios.panel');
@@ -47,6 +46,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('sabores/panel', [SaborController::class, 'panel'])->name('sabores.panel');
         Route::get('unidades/panel', [UnidadController::class, 'panel'])->name('unidades.panel');
 
+        Route::resource('bitacoras', BitacoraController::class);
         Route::resource('empleados', EmpleadoController::class);
         Route::resource('clientes', ClienteController::class);
         Route::resource('usuarios', UserController::class);
@@ -56,6 +56,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('tipos', TipoController::class);
         Route::resource('sabores', SaborController::class);
         Route::resource('unidades', UnidadController::class);
+
+        Route::get('empleados/showByCarnet', [EmpleadoController::class,'showByCarnet'])->name('empleados.showByCarnet');
     });
 
     Route::middleware(['rol:Gerente'])->prefix('gerente')->name('gerente.')->group(function () {

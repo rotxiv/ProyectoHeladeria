@@ -153,6 +153,7 @@
             <a href="{{ route('administrador.clientes.panel') }}">Gestionar clientes</a>
             <a href="{{ route('administrador.roles.panel') }}">Gestionar roles</a>
             <a href="{{ route('administrador.usuarios.panel') }}">Gestionar usuarios</a>
+            <a href="{{ route('administrador.bitacoras.panel') }}">Panel de bitacora</a>
         </div>
 
         <h4 onclick="toggleMenu('menu-cocina')">Administrar Cocina</h4>

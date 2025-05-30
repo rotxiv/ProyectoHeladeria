@@ -3,9 +3,21 @@
 @section('title', 'Detalle del Empleado')
 
 @section('content')
+
+@php
+    $rol = strtolower(Auth::user()->rolActivo()->nombre);
+@endphp
+
 <div class="container">
+
     <h2 class="page-title">Detalle del Empleado</h2>
 
+    @if(isset($mensaje))
+        <div class="alert alert-success">
+            {{ $mensaje }}
+        </div>
+    @endif
+    
     <div class="card">
         <div class="info-group">
             <label>Nombre:</label>
@@ -33,8 +45,9 @@
         </div>
 
         <div class="actions">
-            <a href="{{ route(name: 'gerente.empleados.panel') }}" class="btn gray">Volver</a>
-            <a href="{{ route('gerente.empleados.edit', $empleado->id) }}" class="btn orange">Editar</a>
+            <a href="{{ route(name: $rol.'.empleados.panel') }}" class="btn gray">Volver</a>
+            <a href="{{ route($rol.'.empleados.edit', $empleado->id) }}" class="btn orange">Editar</a>
+            <a href="{{ route($rol.'.empleados.destroy', $empleado->id) }}" class="btn red">Eliminar</a>
         </div>
     </div>
 </div>
@@ -97,5 +110,6 @@
 
     .btn.gray { background-color: #6c757d; }
     .btn.orange { background-color: #fd7e14; }
+    .btn.red { background-color:rgb(253, 0, 13); }
 </style>
 @endsection
